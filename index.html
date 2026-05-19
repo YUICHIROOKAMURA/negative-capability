@@ -1,0 +1,1925 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ネガティヴケイパビリティ — 不確かさの中に居る力</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1a2744;
+    --navy-mid: #243360;
+    --slate: #3d5a80;
+    --slate-light: #5a7fa8;
+    --amber: #d4891a;
+    --amber-light: #e8a93d;
+    --amber-pale: #f5d78e;
+    --cream: #f5f0e8;
+    --cream-dark: #ede6d8;
+    --text-dark: #1a1f2e;
+    --text-mid: #3a4258;
+    --text-soft: #5d6888;
+    --white: #ffffff;
+    --warn: #c0392b;
+    --warn-light: #fadbd8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    color: var(--text-dark);
+    background: var(--cream);
+    overflow-x: hidden;
+  }
+
+  /* ─── PROGRESS BAR ─── */
+  #progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--amber), var(--amber-light));
+    width: 0%;
+    z-index: 1000;
+    transition: width 0.1s linear;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 3px;
+    left: 0;
+    right: 0;
+    background: rgba(26, 39, 68, 0.96);
+    backdrop-filter: blur(8px);
+    z-index: 999;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+  }
+
+  nav .nav-title {
+    color: var(--amber-light);
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  nav .nav-links {
+    display: flex;
+    gap: 1.2rem;
+    list-style: none;
+  }
+
+  nav .nav-links a {
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+
+  nav .nav-links a:hover { color: var(--amber-light); }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    background: var(--navy);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 110%, rgba(61,90,128,0.5) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 80% 20%, rgba(212,137,26,0.08) 0%, transparent 60%);
+  }
+
+  .hero-fog {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 200px;
+    background: linear-gradient(to top, rgba(245,240,232,0.12) 0%, transparent 100%);
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 760px;
+  }
+
+  .hero-label {
+    display: inline-block;
+    border: 1px solid rgba(212,137,26,0.5);
+    color: var(--amber-light);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    padding: 0.35rem 1rem;
+    margin-bottom: 2.5rem;
+    text-transform: uppercase;
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  .hero h1 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.3;
+    margin-bottom: 1.2rem;
+    letter-spacing: 0.02em;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--amber-light);
+  }
+
+  .hero .hero-sub {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.8;
+    margin-bottom: 3rem;
+    font-weight: 300;
+  }
+
+  /* Cup Illustration */
+  .cup-illustration {
+    margin: 2rem auto;
+    width: 180px;
+    height: 180px;
+    position: relative;
+  }
+
+  .cup-illustration svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero-meta {
+    margin-top: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-meta-item {
+    text-align: center;
+  }
+
+  .hero-meta-num {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.8rem;
+    color: var(--amber-light);
+    font-weight: 600;
+    display: block;
+  }
+
+  .hero-meta-label {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.05em;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(255,255,255,0.35);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    animation: bounceDown 2s ease-in-out infinite;
+  }
+
+  @keyframes bounceDown {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(6px); }
+  }
+
+  /* ─── SECTIONS ─── */
+  section {
+    padding: 5rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .section-full {
+    max-width: 100%;
+    padding: 5rem 0;
+  }
+
+  .section-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .section-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--amber);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--amber-pale), transparent);
+    max-width: 120px;
+  }
+
+  .section-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.4;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title em {
+    font-style: normal;
+    color: var(--amber);
+  }
+
+  .body-text {
+    font-size: 0.96rem;
+    line-height: 1.95;
+    color: var(--text-mid);
+    margin-bottom: 1.2rem;
+  }
+
+  .body-text strong {
+    color: var(--navy);
+    font-weight: 700;
+  }
+
+  /* ─── REVEAL ANIMATION ─── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ─── SCENARIO SECTION ─── */
+  .scenario-bg {
+    background: linear-gradient(135deg, #1a2744 0%, #243360 50%, #2d4270 100%);
+    padding: 5rem 2rem;
+  }
+
+  .scenario-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-left: 3px solid var(--amber);
+    border-radius: 2px;
+    padding: 2rem 2.5rem;
+    max-width: 760px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .scenario-card::before {
+    content: '"';
+    font-family: 'Noto Serif JP', serif;
+    font-size: 6rem;
+    color: rgba(212,137,26,0.15);
+    position: absolute;
+    top: -0.5rem;
+    left: 1rem;
+    line-height: 1;
+  }
+
+  .scenario-text {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.85);
+    line-height: 2;
+    font-weight: 300;
+  }
+
+  .scenario-text strong {
+    color: var(--amber-light);
+    font-weight: 600;
+  }
+
+  .scenario-question {
+    margin-top: 2.5rem;
+    text-align: center;
+    font-size: 1.3rem;
+    font-family: 'Noto Serif JP', serif;
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  .scenario-question span {
+    color: var(--amber-light);
+  }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(to right, var(--amber), transparent);
+    margin: 2rem 0;
+  }
+
+  /* ─── URGENCY SECTION ─── */
+  .urgency-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .urgency-card {
+    background: var(--white);
+    border-radius: 4px;
+    padding: 1.8rem;
+    border-top: 3px solid var(--slate);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+  }
+
+  .urgency-card .card-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 1rem;
+  }
+
+  .urgency-card h4 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 0.6rem;
+  }
+
+  .urgency-card p {
+    font-size: 0.85rem;
+    line-height: 1.75;
+    color: var(--text-soft);
+  }
+
+  /* ─── HISTORY SECTION ─── */
+  .history-bg {
+    background: var(--cream-dark);
+    padding: 5rem 2rem;
+  }
+
+  .timeline {
+    position: relative;
+    max-width: 760px;
+    margin: 3rem auto 0;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 48px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--amber), var(--slate-light));
+  }
+
+  .timeline-item {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    position: relative;
+  }
+
+  .timeline-year {
+    flex-shrink: 0;
+    width: 96px;
+    text-align: right;
+    padding-top: 0.1rem;
+  }
+
+  .timeline-year span {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--amber);
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: 44px;
+    top: 6px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--amber);
+    border: 2px solid var(--cream-dark);
+  }
+
+  .timeline-content {
+    flex: 1;
+    padding-left: 1.5rem;
+  }
+
+  .timeline-content h4 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 0.5rem;
+  }
+
+  .timeline-content p {
+    font-size: 0.88rem;
+    line-height: 1.8;
+    color: var(--text-mid);
+  }
+
+  .keats-quote {
+    background: var(--navy);
+    border-radius: 4px;
+    padding: 2rem 2.5rem;
+    margin: 2.5rem 0;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+  }
+
+  .keats-quote p {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.95rem;
+    line-height: 2;
+    color: rgba(255,255,255,0.85);
+    font-weight: 300;
+    font-style: italic;
+  }
+
+  .keats-quote .quote-source {
+    margin-top: 1rem;
+    font-size: 0.72rem;
+    color: var(--amber-light);
+    letter-spacing: 0.05em;
+    font-style: normal;
+  }
+
+  /* ─── DEFINITION SECTION ─── */
+  .definition-core {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+    border-radius: 6px;
+    padding: 3rem;
+    margin: 2.5rem 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .definition-core::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    left: -20%;
+    width: 60%;
+    height: 150%;
+    background: radial-gradient(ellipse, rgba(212,137,26,0.08) 0%, transparent 70%);
+  }
+
+  .definition-core .def-word {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    color: var(--amber-light);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .definition-core .def-main {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    color: var(--white);
+    line-height: 1.7;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+  }
+
+  .definition-core .def-main em {
+    font-style: normal;
+    color: var(--amber-light);
+    border-bottom: 1px solid rgba(212,137,26,0.4);
+  }
+
+  /* Three-part visual */
+  .three-parts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--cream-dark);
+    border: 1px solid var(--cream-dark);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 2.5rem 0;
+  }
+
+  .part-item {
+    background: var(--white);
+    padding: 2rem 1.5rem;
+    text-align: center;
+  }
+
+  .part-item .part-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 1rem;
+  }
+
+  .part-item h4 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+  }
+
+  .part-item p {
+    font-size: 0.78rem;
+    line-height: 1.7;
+    color: var(--text-soft);
+  }
+
+  /* ─── BION BOX ─── */
+  .bion-box {
+    background: var(--slate);
+    border-radius: 4px;
+    padding: 2rem 2.5rem;
+    margin: 2rem 0;
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+
+  .bion-box .bion-icon {
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+  }
+
+  .bion-box .bion-text h4 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--amber-light);
+    margin-bottom: 0.5rem;
+  }
+
+  .bion-box .bion-text p {
+    font-size: 0.87rem;
+    line-height: 1.85;
+    color: rgba(255,255,255,0.8);
+  }
+
+  /* ─── NOT-NC SECTION ─── */
+  .not-nc-bg {
+    background: #f7f3f0;
+    padding: 5rem 2rem;
+  }
+
+  .not-nc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .not-nc-card {
+    background: var(--white);
+    border-radius: 4px;
+    padding: 1.8rem;
+    border-left: 4px solid var(--warn);
+    position: relative;
+  }
+
+  .not-nc-card .cross {
+    width: 32px;
+    height: 32px;
+    background: var(--warn-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  .not-nc-card h4 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--warn);
+    margin-bottom: 0.4rem;
+  }
+
+  .not-nc-card .not-desc {
+    font-size: 0.82rem;
+    color: var(--text-mid);
+    line-height: 1.7;
+    margin-bottom: 0.8rem;
+  }
+
+  .not-nc-card .actual {
+    font-size: 0.82rem;
+    color: var(--slate);
+    line-height: 1.7;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--cream-dark);
+  }
+
+  .not-nc-card .actual strong {
+    color: var(--navy);
+  }
+
+  /* ─── PRACTICE SECTION ─── */
+  .practice-bg {
+    background: linear-gradient(180deg, var(--cream) 0%, #edf3f8 100%);
+    padding: 5rem 2rem;
+  }
+
+  .practice-scene {
+    background: var(--white);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  }
+
+  .practice-scene-header {
+    background: var(--navy);
+    padding: 1.2rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .scene-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--amber);
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .practice-scene-header h4 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.95rem;
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  .practice-scene-body {
+    padding: 2rem;
+  }
+
+  .compare-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .compare-cell {
+    padding: 1.2rem;
+    border-radius: 3px;
+    font-size: 0.83rem;
+    line-height: 1.75;
+  }
+
+  .compare-cell.without {
+    background: #fdf0f0;
+    border-left: 3px solid #e0a0a0;
+    color: #6b3030;
+  }
+
+  .compare-cell.with {
+    background: #f0f5f0;
+    border-left: 3px solid #7aab7a;
+    color: #2d4a2d;
+  }
+
+  .compare-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    display: block;
+    opacity: 0.6;
+  }
+
+  /* ─── CULTIVATE ─── */
+  .cultivate-items {
+    margin-top: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .cultivate-item {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    background: var(--white);
+    padding: 1.8rem;
+    border-radius: 4px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  }
+
+  .cultivate-num {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    background: var(--navy);
+    color: var(--amber-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 2px;
+  }
+
+  .cultivate-text h4 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 0.4rem;
+  }
+
+  .cultivate-text p {
+    font-size: 0.87rem;
+    line-height: 1.8;
+    color: var(--text-mid);
+  }
+
+  /* ─── CRITICAL ─── */
+  .critical-bg {
+    background: var(--navy);
+    padding: 5rem 2rem;
+  }
+
+  .critical-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .critical-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-top: 2px solid var(--amber);
+    padding: 1.8rem;
+    border-radius: 2px;
+  }
+
+  .critical-card h4 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--amber-light);
+    margin-bottom: 0.6rem;
+  }
+
+  .critical-card p {
+    font-size: 0.84rem;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.7);
+  }
+
+  /* ─── SOURCES ─── */
+  .sources-bg {
+    background: var(--cream-dark);
+    padding: 4rem 2rem;
+  }
+
+  .sources-list {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .source-item {
+    background: var(--white);
+    border-radius: 3px;
+    padding: 1rem 1.5rem;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: var(--text-mid);
+    border-left: 2px solid var(--slate-light);
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .source-item a {
+    color: var(--slate);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s;
+    word-break: break-all;
+  }
+
+  .source-item a:hover { color: var(--amber); }
+
+  .source-num {
+    flex-shrink: 0;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.75rem;
+    color: var(--amber);
+    font-weight: 700;
+    margin-top: 0.1rem;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--navy);
+    padding: 2rem;
+    text-align: center;
+    color: rgba(255,255,255,0.4);
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+  }
+
+  footer span { color: rgba(255,255,255,0.6); }
+
+  /* ─── CALLOUT BOX ─── */
+  .callout {
+    border-left: 3px solid var(--amber);
+    padding: 1.2rem 1.5rem;
+    background: rgba(212,137,26,0.06);
+    border-radius: 0 3px 3px 0;
+    margin: 1.5rem 0;
+  }
+
+  .callout p {
+    font-size: 0.88rem;
+    line-height: 1.8;
+    color: var(--text-mid);
+  }
+
+  .callout strong { color: var(--navy); }
+
+  /* ─── NEURO BOX ─── */
+  .neuro-box {
+    background: linear-gradient(135deg, #2d4270 0%, #1a2744 100%);
+    border-radius: 6px;
+    padding: 2.5rem;
+    margin: 2.5rem 0;
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .neuro-box .neuro-icon {
+    width: 80px;
+    height: 80px;
+  }
+
+  .neuro-box h4 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1rem;
+    color: var(--amber-light);
+    margin-bottom: 0.6rem;
+    font-weight: 700;
+  }
+
+  .neuro-box p {
+    font-size: 0.85rem;
+    line-height: 1.85;
+    color: rgba(255,255,255,0.75);
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 640px) {
+    nav .nav-links { display: none; }
+    .three-parts { grid-template-columns: 1fr; }
+    .compare-row { grid-template-columns: 1fr; }
+    .neuro-box { grid-template-columns: 1fr; }
+    .neuro-box .neuro-icon { display: none; }
+    .bion-box { flex-direction: column; }
+    .timeline::before { left: 32px; }
+    .timeline-dot { left: 28px; }
+    .timeline-year { width: 64px; }
+    .timeline-year span { font-size: 0.85rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<nav>
+  <span class="nav-title">ネガティヴケイパビリティ</span>
+  <ul class="nav-links">
+    <li><a href="#scenario">場面</a></li>
+    <li><a href="#definition">定義</a></li>
+    <li><a href="#practice">実践</a></li>
+    <li><a href="#client-nc">利用者のNC</a></li>
+    <li><a href="#cultivate">育て方</a></li>
+    <li><a href="#critical">批判的視点</a></li>
+    <li><a href="#sources">出典</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero" id="top">
+  <div class="hero-content">
+    <div class="hero-label">就労移行支援スタッフのための</div>
+    <h1>ネガティヴ<br><em>ケイパビリティ</em></h1>
+    <p class="hero-sub">
+      答えを出せない状況の中に留まり続ける力。<br>
+      不確かさを、消し去るのではなく、抱えていられること。
+    </p>
+
+    <div class="cup-illustration">
+      <svg viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Fog/mist circles -->
+        <circle cx="90" cy="90" r="82" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+        <circle cx="90" cy="90" r="65" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+        <!-- Open hands holding space -->
+        <!-- Left hand -->
+        <path d="M28 110 Q22 95 26 78 Q30 62 40 58 Q45 56 48 62 L52 78" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M40 58 Q42 48 50 46 Q56 45 58 52 L60 70" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M50 46 Q52 37 60 36 Q66 35 68 43 L68 62" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M60 36 Q62 29 70 30 Q76 31 76 40 L74 58" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M28 110 Q35 118 55 122 L80 122" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+        <!-- Right hand (mirror) -->
+        <path d="M152 110 Q158 95 154 78 Q150 62 140 58 Q135 56 132 62 L128 78" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M140 58 Q138 48 130 46 Q124 45 122 52 L120 70" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M130 46 Q128 37 120 36 Q114 35 112 43 L112 62" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M120 36 Q118 29 110 30 Q104 31 104 40 L106 58" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M152 110 Q145 118 125 122 L100 122" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+        <!-- Floating question marks in the space -->
+        <text x="78" y="88" fill="rgba(212,137,26,0.6)" font-size="22" font-family="serif">?</text>
+        <text x="97" y="72" fill="rgba(212,137,26,0.35)" font-size="14" font-family="serif">?</text>
+        <text x="65" y="68" fill="rgba(212,137,26,0.25)" font-size="11" font-family="serif">?</text>
+        <text x="104" y="94" fill="rgba(212,137,26,0.3)" font-size="10" font-family="serif">?</text>
+
+        <!-- Gentle glow -->
+        <circle cx="90" cy="80" r="30" fill="rgba(212,137,26,0.04)"/>
+      </svg>
+    </div>
+
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="hero-meta-num">1817</span>
+        <span class="hero-meta-label">概念誕生（Keats）</span>
+      </div>
+      <div class="hero-meta-item" style="border-left:1px solid rgba(255,255,255,0.15); border-right:1px solid rgba(255,255,255,0.15); padding:0 2rem;">
+        <span class="hero-meta-num">3つ</span>
+        <span class="hero-meta-label">核心的能力</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-num">≠</span>
+        <span class="hero-meta-label">受け身・諦め</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-fog"></div>
+  <div class="scroll-hint">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M8 3v10M3 9l5 5 5-5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    スクロールしてください
+  </div>
+</section>
+
+<!-- ─── SCENARIO ─── -->
+<div class="scenario-bg" id="scenario">
+  <div class="section-inner reveal">
+    <div class="section-label" style="color:var(--amber-light);">Opening</div>
+    <h2 class="section-title" style="color:var(--white); margin-bottom:2rem;">この感覚、知っていませんか？</h2>
+
+    <div class="scenario-card">
+      <div class="scenario-text">
+        面談で、<strong>なかなか踏み出せないご利用者</strong>を前にしている。
+        長い沈黙。どんな言葉をかけても、状況は動かない。
+        「何か答えを出さなければ」という焦りが、自分の中でじわじわと大きくなっていく。<br><br>
+        いっそ「こういう選択肢はどうですか」と提案してしまいたい。
+        でもそれは、本当に<strong>その人のため</strong>なのか——
+        それとも、自分の<strong>不安を鎮めるため</strong>なのか？
+      </div>
+    </div>
+
+    <p class="scenario-question" style="margin-top: 2rem;">
+      あるいは、支援を続けていて<br>
+      <span>「自分は何もできていない」</span>という感覚に<br>
+      苛まれたことはありませんか？
+    </p>
+  </div>
+</div>
+
+<!-- ─── WHY WE RUSH ─── -->
+<section id="why">
+  <div class="section-label">Section 01</div>
+  <h2 class="section-title reveal">なぜ私たちは<em>「解決」を急いで</em>しまうのか</h2>
+
+  <p class="body-text reveal reveal-delay-1">
+    支援者として「答えを出したい」「状況を動かしたい」という衝動は、決して悪意からではありません。
+    むしろ、それは<strong>誠実さと責任感の表れ</strong>でもあります。でも同時に——
+    不確かな状況に置かれたとき、私たちの神経系は<strong>それ自体を脅威として処理する</strong>ことが知られています。
+  </p>
+
+  <div class="neuro-box reveal reveal-delay-2">
+    <svg class="neuro-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Brain outline simplified -->
+      <path d="M40 15 Q30 10 22 18 Q14 26 16 36 Q12 40 14 46 Q16 54 24 56 Q26 64 34 66 Q42 68 48 62 Q56 64 62 56 Q70 52 68 44 Q72 38 68 30 Q64 20 56 16 Q48 12 40 15Z" stroke="rgba(212,137,26,0.5)" stroke-width="1.2" fill="none"/>
+      <!-- Brain wrinkles -->
+      <path d="M28 30 Q32 26 38 30 Q44 34 48 28" stroke="rgba(255,255,255,0.3)" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <path d="M22 44 Q28 40 34 44 Q40 48 46 42 Q52 36 58 40" stroke="rgba(255,255,255,0.25)" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <path d="M30 56 Q36 52 42 56 Q48 60 54 54" stroke="rgba(255,255,255,0.2)" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <!-- Alert signal -->
+      <circle cx="56" cy="22" r="10" fill="rgba(192,57,43,0.2)" stroke="rgba(192,57,43,0.5)" stroke-width="1"/>
+      <text x="52" y="27" fill="rgba(192,57,43,0.9)" font-size="11">!</text>
+    </svg>
+    <div>
+      <h4>不確かさは「エラーシグナル」として処理される</h4>
+      <p>
+        神経科学的には、予測できない状況——つまり「先が読めない」状態——は、脳内でエラーシグナルとして処理され、
+        不快感・焦り・行動への衝動を引き起こします（Grupe &amp; Nitschke, 2013）。
+        これは人類が生き延びるための設計であり、支援者も例外ではありません。
+        「何かしなければ」という焦りは、<strong>神経系が生み出す自然な反応</strong>なのです。
+      </p>
+    </div>
+  </div>
+
+  <div class="urgency-grid">
+    <div class="urgency-card reveal reveal-delay-1">
+      <svg class="card-icon" viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="20" r="18" stroke="var(--slate)" stroke-width="1.2"/>
+        <path d="M20 10v11l6 4" stroke="var(--slate)" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+      <h4>成果・数値へのプレッシャー</h4>
+      <p>就労移行では「就職件数」「定着率」といった数値目標が存在する。
+        成果が見えにくい支援プロセスへの不安が、早期の解決志向につながりやすい。</p>
+    </div>
+    <div class="urgency-card reveal reveal-delay-2">
+      <svg class="card-icon" viewBox="0 0 40 40" fill="none">
+        <rect x="8" y="10" width="24" height="20" rx="2" stroke="var(--slate)" stroke-width="1.2"/>
+        <path d="M14 18h12M14 23h8" stroke="var(--slate)" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+      <h4>「知識で解決する」という職業文化</h4>
+      <p>支援者として研修を重ね、知識を蓄えることが求められる。
+        その訓練が時に「知識で答えを出さなければ」という強迫的な姿勢を生む。</p>
+    </div>
+    <div class="urgency-card reveal reveal-delay-3">
+      <svg class="card-icon" viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="15" r="7" stroke="var(--slate)" stroke-width="1.2"/>
+        <path d="M8 35 Q10 26 20 26 Q30 26 32 35" stroke="var(--slate)" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+      <h4>共感疲労と自己保護</h4>
+      <p>クライアントの苦しさをずっと抱えることは消耗する。
+        「解決策」を出すことは、支援者自身がその重さを手放す手段になることもある。</p>
+    </div>
+  </div>
+
+  <div class="callout reveal">
+    <p>
+      <strong>重要な問い：</strong>私たちが「解決」を急ぐとき、それはご利用者のニーズに応えているのか、
+      それとも<strong>私たち自身の不安を和らげている</strong>のか？
+      この問いと正直に向き合うことが、ネガティヴケイパビリティの出発点です。
+    </p>
+  </div>
+</section>
+
+<!-- ─── HISTORY ─── -->
+<div class="history-bg" id="history">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--amber);">Section 02</div>
+    <h2 class="section-title reveal">概念の誕生——<em>詩人が名づけたもの</em></h2>
+
+    <p class="body-text reveal reveal-delay-1">
+      ネガティヴケイパビリティは、1817年、英国の詩人<strong>ジョン・キーツ</strong>が弟のジョージとトーマス宛ての手紙の中で使った言葉です。
+      その後、精神分析家ウィルフレッド・ビオンによって対人援助の文脈に持ち込まれ、
+      現代では福祉実践・教育・リーダーシップ論に至るまで広く参照されています。
+    </p>
+
+    <div class="keats-quote reveal reveal-delay-2">
+      <p>
+        「人が偉大な業績を成し遂げるために必要な質とは何か——とりわけ文学において、シェイクスピアが並外れて持っていたものだ。
+        すなわちネガティヴケイパビリティ、つまり<strong>事実や理由を苛立たしいほどに追い求めることなく、
+        不確かさ・謎・疑念の中に居ることができる</strong>能力のことだ」
+      </p>
+      <p class="quote-source">John Keats, 弟ジョージ・トーマス宛ての手紙, 1817年12月21日</p>
+    </div>
+
+    <div class="timeline reveal reveal-delay-1">
+      <div class="timeline-item">
+        <div class="timeline-year"><span>1817</span></div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h4>キーツが概念を命名</h4>
+          <p>詩的創造における「不確かさへの耐性」として提唱。「ネガティヴ」は否定的という意味ではなく、
+            「何かをしない・確定しない」という意味での否定形。</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year"><span>1960s</span></div>
+        <div class="timeline-dot" style="background:var(--slate-light);"></div>
+        <div class="timeline-content">
+          <h4>精神分析家ビオンが再定義</h4>
+          <p>キーツの概念を精神分析理論に組み込む。
+            分析家が「記憶なく・欲望なく（without memory or desire）」クライアントに向き合う能力として再解釈（Bion, 1970）。</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year"><span>2000s</span></div>
+        <div class="timeline-dot" style="background:var(--slate-light); opacity:0.7;"></div>
+        <div class="timeline-content">
+          <h4>対人援助・組織論・教育への展開</h4>
+          <p>社会福祉実践、看護、教育、リーダーシップ論の分野で参照が増加。
+            「知識の欠如」ではなく「知識の上に成り立つ高度な能力」として位置づけが定着。</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year"><span>近年</span></div>
+        <div class="timeline-dot" style="background:var(--cream-dark); border-color:var(--slate-light);"></div>
+        <div class="timeline-content">
+          <h4>日本の対人援助領域での注目</h4>
+          <p>精神科医・帚木蓬生（2017）が「ネガティブ・ケイパビリティ——答えの出ない事態に耐える力」を出版し、
+            国内での認知が広まる。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── DEFINITION ─── -->
+<section id="definition">
+  <div class="section-label">Section 03</div>
+  <h2 class="section-title reveal">ネガティヴケイパビリティとは<em>何か</em></h2>
+
+  <div class="definition-core reveal reveal-delay-1">
+    <span class="def-word">Core Definition</span>
+    <p class="def-main">
+      「不確かさ・謎・解決できない問いの中に、<br>
+      <em>苛立ちや焦りに引きずられることなく</em>、<br>
+      留まり続けることができる能力」
+    </p>
+  </div>
+
+  <p class="body-text reveal reveal-delay-2">
+    「ネガティヴ」とは「悪い」という意味ではありません。
+    <strong>「〜しない・〜でない（negative）」</strong>という意味——つまり、
+    「知ろうとしない」「解決しようとしない」「確定させようとしない」という、
+    意図的な<em>しない</em>の能力です。
+    これは受け身や無力とは根本的に異なります。
+  </p>
+
+  <div class="three-parts reveal">
+    <div class="part-item">
+      <svg class="part-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Anchor / hold -->
+        <circle cx="24" cy="14" r="6" stroke="var(--navy)" stroke-width="1.3"/>
+        <path d="M24 20v20M16 38l8 4 8-4" stroke="var(--navy)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M10 28Q14 36 24 36Q34 36 38 28" stroke="var(--navy)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+      </svg>
+      <h4>留まる力<br>（Holding）</h4>
+      <p>答えが出なくても、その状況から逃げず、投げ出さず、そこに居続けられること。</p>
+    </div>
+    <div class="part-item" style="border-left:1px solid var(--cream-dark); border-right:1px solid var(--cream-dark);">
+      <svg class="part-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Open container -->
+        <rect x="10" y="18" width="28" height="22" rx="2" stroke="var(--navy)" stroke-width="1.3"/>
+        <!-- Open top with question -->
+        <path d="M10 18h28" stroke="var(--navy)" stroke-width="0.8" stroke-dasharray="3 2"/>
+        <text x="21" y="34" fill="var(--amber)" font-size="14" font-family="serif">?</text>
+        <!-- Hands on sides suggesting holding space -->
+        <path d="M6 22v12M42 22v12" stroke="var(--navy)" stroke-width="1.3" stroke-linecap="round"/>
+      </svg>
+      <h4>抱える力<br>（Containing）</h4>
+      <p>クライアントの不安・混乱を、自分の内側に受け取り、消化できるほどに保持できること。</p>
+    </div>
+    <div class="part-item">
+      <svg class="part-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Gentle wave -->
+        <path d="M8 24 Q16 16 24 24 Q32 32 40 24" stroke="var(--navy)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+        <path d="M8 30 Q16 22 24 30 Q32 38 40 30" stroke="var(--navy)" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.4"/>
+        <!-- Stable base -->
+        <path d="M12 40h24" stroke="var(--navy)" stroke-width="1.3" stroke-linecap="round"/>
+        <circle cx="24" cy="12" r="3" stroke="var(--amber)" stroke-width="1.2"/>
+      </svg>
+      <h4>待つ力<br>（Waiting）</h4>
+      <p>性急な解決・介入・解釈を手放し、ものごとが自然に展開するのを見守れること。</p>
+    </div>
+  </div>
+
+  <!-- BION BOX -->
+  <div class="bion-box reveal reveal-delay-1">
+    <svg class="bion-icon" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Person figure simplified -->
+      <circle cx="28" cy="14" r="7" stroke="rgba(255,255,255,0.6)" stroke-width="1.2"/>
+      <path d="M16 42 Q16 30 28 28 Q40 30 40 42" stroke="rgba(255,255,255,0.6)" stroke-width="1.2" fill="none"/>
+      <!-- Thought bubble -->
+      <circle cx="42" cy="12" r="2" fill="rgba(212,137,26,0.5)"/>
+      <circle cx="46" cy="9" r="2.5" fill="rgba(212,137,26,0.5)"/>
+      <circle cx="50" cy="6" r="4" fill="rgba(212,137,26,0.5)"/>
+    </svg>
+    <div class="bion-text">
+      <h4>ビオンの洞察：「記憶なく・欲望なく」</h4>
+      <p>
+        精神分析家ビオンは、セラピストがクライアントを「理解しよう」「治そう」「進歩を確認しよう」と急ぐとき、
+        それがかえって本当の接触を妨げると論じました。
+        真に相手に向き合うためには、<strong>過去の記憶や将来への期待を手放して</strong>、
+        「今・ここ」にある体験をそのまま受け取る状態（Reverie）が必要だと述べています（Bion, 1970）。
+        これはネガティヴケイパビリティの精神分析的実践形態です。
+      </p>
+    </div>
+  </div>
+
+  <div class="callout reveal">
+    <p>
+      <strong>補足：</strong>ネガティヴケイパビリティは「何もしない」ことへの免罪符ではありません。
+      豊富な知識と技術を土台としながら、<strong>あえて介入しない・あえて結論を出さない</strong>という、
+      高度に意図的な能力です。知識がないから「わからない」とは根本的に異なります。
+    </p>
+  </div>
+</section>
+
+<!-- ─── NOT NC ─── -->
+<div class="not-nc-bg" id="notNC">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--warn);">重要な整理</div>
+    <h2 class="section-title reveal">これは<em>NCではありません</em> ——よくある誤解</h2>
+    <p class="body-text reveal reveal-delay-1">
+      ネガティヴケイパビリティへの最大の誤解は、「何もしないこと」「諦めること」と混同することです。
+      以下の区別を明確にしておくことが実践の前提として重要です。
+    </p>
+
+    <div class="not-nc-grid">
+      <div class="not-nc-card reveal reveal-delay-1">
+        <div class="cross">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2 2l10 10M12 2L2 12" stroke="var(--warn)" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h4>受け身・消極性</h4>
+        <p class="not-desc">「どうせ何をしても変わらない」「考えても仕方ない」という諦めや無力感。</p>
+        <p class="actual">
+          <strong>NCとは：</strong>不確かさを積極的に保持しようとする、高度に能動的な姿勢。
+          消極的な放棄とは正反対。
+        </p>
+      </div>
+      <div class="not-nc-card reveal reveal-delay-2">
+        <div class="cross">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2 2l10 10M12 2L2 12" stroke="var(--warn)" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h4>知識・技術の欠如</h4>
+        <p class="not-desc">「わからないからわからない」という、勉強不足や経験不足からくる不明瞭さ。</p>
+        <p class="actual">
+          <strong>NCとは：</strong>十分な知識と経験を持ちながら、あえて即答・介入を保留するという、
+          技能の高度な形。
+        </p>
+      </div>
+      <div class="not-nc-card reveal reveal-delay-3">
+        <div class="cross">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2 2l10 10M12 2L2 12" stroke="var(--warn)" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h4>感情の切り離し</h4>
+        <p class="not-desc">「感じないようにする」「距離を置いて関わる」という感情の麻痺や回避。</p>
+        <p class="actual">
+          <strong>NCとは：</strong>相手の感情・苦しさを受け取りながら、それに飲み込まれずに保持する。
+          感じながら留まること。
+        </p>
+      </div>
+      <div class="not-nc-card reveal reveal-delay-4">
+        <div class="cross">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2 2l10 10M12 2L2 12" stroke="var(--warn)" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h4>クライシス時の不介入</h4>
+        <p class="not-desc">緊急性のある状況（自傷・自殺念慮・精神症状の急性悪化等）での見守りに終始すること。</p>
+        <p class="actual">
+          <strong>NCとは：</strong>急性期・クライシス対応とは文脈が異なる。
+          明確な行動が必要な場面では迷わず介入することが前提。
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── PRACTICE ─── -->
+<div class="practice-bg" id="practice">
+  <div class="section-inner">
+    <div class="section-label">Section 04</div>
+    <h2 class="section-title reveal">就労移行の<em>現場で</em>——3つの場面</h2>
+    <p class="body-text reveal reveal-delay-1">
+      ネガティヴケイパビリティは抽象的な概念ですが、現場での具体的な場面と照らし合わせることで
+      その意味が明確になります。
+    </p>
+
+    <!-- Scene 1 -->
+    <div class="practice-scene reveal">
+      <div class="practice-scene-header">
+        <div class="scene-num">1</div>
+        <h4>「いつ就職できるかわからない」ご利用者との面談</h4>
+      </div>
+      <div class="practice-scene-body">
+        <p class="body-text" style="margin-bottom:1rem;">
+          数ヶ月支援を続けているが、職場体験も就職活動もなかなか進まない。
+          ご利用者は「自信がない」「まだ準備できていない」と繰り返す。
+        </p>
+        <div class="compare-row">
+          <div class="compare-cell without">
+            <span class="compare-label">NC なし（焦りから）</span>
+            「いつかはやってみないと。少しずつでも動き始めましょう」「こういう求人、どうですか」と、
+            支援者の焦りがご利用者への圧力になる。
+            ご利用者は「急かされている」と感じ、逆に閉じていく。
+          </div>
+          <div class="compare-cell with">
+            <span class="compare-label">NC あり（留まる）</span>
+            「まだ準備できていない、という感覚を、もう少し聞かせてもらえますか」と、
+            その状態に共にいることを選ぶ。
+            「わからなさ」を問題化せず、ご利用者が自分のペースで言語化するのを支える。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scene 2 -->
+    <div class="practice-scene reveal reveal-delay-1">
+      <div class="practice-scene-header">
+        <div class="scene-num">2</div>
+        <h4>症状が安定しない・診断の揺れへの対応</h4>
+      </div>
+      <div class="practice-scene-body">
+        <p class="body-text" style="margin-bottom:1rem;">
+          ご利用者の状態が週によって大きく変化する。医療機関との情報共有も限られ、
+          「この方に今何が起きているのか」が支援者にはわからない。
+        </p>
+        <div class="compare-row">
+          <div class="compare-cell without">
+            <span class="compare-label">NC なし（知識で確定させようとする）</span>
+            手持ちの知識や過去の支援経験から「おそらくこういう状態では」という仮説に飛びつき、
+            それに基づいた対応を固定化してしまう。
+          </div>
+          <div class="compare-cell with">
+            <span class="compare-label">NC あり（曖昧さを保持する）</span>
+            「今の自分にはこの方のことがわからない」という事実を受け入れた上で、
+            「だから今日は、この方が話すことをただ聞こう」と関わり続ける。
+            診断や解釈よりも、目の前の体験を優先する。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scene 3 -->
+    <div class="practice-scene reveal reveal-delay-2">
+      <div class="practice-scene-header">
+        <div class="scene-num">3</div>
+        <h4>長い沈黙——面談の「間」に耐えること</h4>
+      </div>
+      <div class="practice-scene-body">
+        <p class="body-text" style="margin-bottom:1rem;">
+          ご利用者が面談中に黙り込む。10秒、20秒。支援者の中で「何か言わなければ」という衝動が高まる。
+        </p>
+        <div class="compare-row">
+          <div class="compare-cell without">
+            <span class="compare-label">NC なし（沈黙を埋める）</span>
+            「何か考えていますか」「ちょっと難しかったですね」と間を埋めることで、
+            ご利用者が自分の内側から言葉を見つけるプロセスを中断してしまう。
+          </div>
+          <div class="compare-cell with">
+            <span class="compare-label">NC あり（沈黙を保持する）</span>
+            その沈黙をご利用者の内的プロセスとして尊重し、自分の中の焦りを観察しながら
+            「今ここで待つこと」を意識的に選ぶ。
+            ご利用者から言葉が出たとき、それは本人の中から生まれたものになる。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── CLIENT NC ─── -->
+<section id="client-nc">
+  <div class="section-label">Section 05</div>
+  <h2 class="section-title reveal">利用者さんの<em>ネガティヴケイパビリティ</em></h2>
+
+  <p class="body-text reveal reveal-delay-1">
+    ここまで支援者のNCを見てきました。でも実は——<strong>ご利用者自身もまた、巨大な不確かさの中にいます。</strong>
+    そしてその不確かさとどう向き合えるかが、就労準備の深さに深く関わっています。
+  </p>
+
+  <!-- What clients face -->
+  <div class="definition-core reveal reveal-delay-2" style="margin: 2rem 0;">
+    <span class="def-word">利用者さんが直面している不確かさ</span>
+    <p class="def-main" style="font-size: clamp(1rem, 2.5vw, 1.3rem);">
+      「自分は<em>本当に働けるのか</em>」<br>
+      「どんな仕事が<em>自分に合うのか</em>」<br>
+      「また症状が悪化したら<em>どうなるのか</em>」<br>
+      「就職できなかったら<em>自分はどうなるのか</em>」
+    </p>
+  </div>
+
+  <p class="body-text reveal">
+    これらの問いには、簡単には答えが出ません。
+    でも、この「答えの出なさ」に耐えられないと、
+    就労準備のプロセスそのものが歪んでしまうことがあります。
+  </p>
+
+  <!-- What low client NC looks like -->
+  <div style="background: var(--white); border-radius: 6px; padding: 2rem 2.5rem; margin: 2rem 0; box-shadow: 0 2px 16px rgba(0,0,0,0.06);" class="reveal reveal-delay-1">
+    <h4 style="font-family:'Noto Serif JP',serif; font-size:1rem; color:var(--navy); margin-bottom:1.2rem; font-weight:700;">
+      利用者のNCが低い状態で起きやすいこと
+    </h4>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem;">
+      <div style="padding:1rem 1.2rem; background:#fdf8f4; border-left:3px solid var(--amber-pale); border-radius:2px;">
+        <p style="font-size:0.83rem; line-height:1.75; color:var(--text-mid);">
+          <strong style="color:var(--navy); display:block; margin-bottom:0.3rem;">早期の見切り・決定</strong>
+          「もうここでいいです」と、自分に本当に合うかを十分に探索せず、
+          不確かさを終わらせるために就職先を性急に決めてしまう。
+        </p>
+      </div>
+      <div style="padding:1rem 1.2rem; background:#fdf8f4; border-left:3px solid var(--amber-pale); border-radius:2px;">
+        <p style="font-size:0.83rem; line-height:1.75; color:var(--text-mid);">
+          <strong style="color:var(--navy); display:block; margin-bottom:0.3rem;">過度な自己レッテル</strong>
+          「自分はADHDだから〇〇しかできない」「うつだから無理だ」と、
+          診断や過去の経験で自己像を確定させ、可能性の探索を止めてしまう。
+        </p>
+      </div>
+      <div style="padding:1rem 1.2rem; background:#fdf8f4; border-left:3px solid var(--amber-pale); border-radius:2px;">
+        <p style="font-size:0.83rem; line-height:1.75; color:var(--text-mid);">
+          <strong style="color:var(--navy); display:block; margin-bottom:0.3rem;">試行錯誤への過剰反応</strong>
+          職場体験で少しうまくいかないと「やっぱり自分には無理だ」と全否定し、
+          プロセスに内在する不確かさに耐えられない。
+        </p>
+      </div>
+      <div style="padding:1rem 1.2rem; background:#fdf8f4; border-left:3px solid var(--amber-pale); border-radius:2px;">
+        <p style="font-size:0.83rem; line-height:1.75; color:var(--text-mid);">
+          <strong style="color:var(--navy); display:block; margin-bottom:0.3rem;">曖昧な状況への低耐性</strong>
+          職場での不明確な指示・人間関係の微妙さ・評価の曖昧さに耐えられず、
+          就職後の早期離職につながることがある。
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mutual relationship - this is the key visual -->
+  <div class="section-label reveal" style="margin-top: 3rem;">核心：相互関係</div>
+  <h3 class="section-title reveal" style="font-size: 1.4rem; margin-bottom: 1rem;">
+    支援者のNCが、<em>利用者のNCを育む土壌になる</em>
+  </h3>
+
+  <p class="body-text reveal reveal-delay-1">
+    ビオンは「コンテイナー・コンテインド（容器と中身）」という概念を提唱しました。
+    支援者がご利用者の不安・混乱・不確かさを「抱えられる器（コンテイナー）」として機能するとき、
+    ご利用者はその安全な容器の中で、自分の不確かさを保持できるようになります。
+    逆に言えば——<strong>支援者がNCを持てていないと、ご利用者もNCを持てない</strong>のです。
+  </p>
+
+  <!-- Visual of the mutual relationship -->
+  <div class="reveal reveal-delay-2" style="background: linear-gradient(135deg, var(--navy) 0%, #2d4270 100%); border-radius:8px; padding:2.5rem; margin:2rem 0; overflow:hidden; position:relative;">
+    <div style="position:absolute; top:-30%; right:-10%; width:300px; height:300px; background:radial-gradient(ellipse, rgba(212,137,26,0.07) 0%, transparent 70%); pointer-events:none;"></div>
+
+    <h4 style="font-family:'Noto Serif JP',serif; font-size:0.9rem; color:var(--amber-light); text-align:center; margin-bottom:2rem; letter-spacing:0.05em;">コンテイナー・コンテインドの関係</h4>
+
+    <div style="display:grid; grid-template-columns:1fr auto 1fr; gap:1rem; align-items:center;">
+      <!-- Staff side -->
+      <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:1.5rem; text-align:center;">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" style="margin:0 auto 1rem; display:block;">
+          <!-- Outer container shape -->
+          <rect x="6" y="8" width="36" height="34" rx="18" stroke="rgba(232,169,61,0.6)" stroke-width="1.2"/>
+          <!-- Person inside -->
+          <circle cx="24" cy="20" r="5" stroke="rgba(255,255,255,0.6)" stroke-width="1.1"/>
+          <path d="M14 38 Q15 30 24 29 Q33 30 34 38" stroke="rgba(255,255,255,0.6)" stroke-width="1.1" fill="none"/>
+        </svg>
+        <p style="font-family:'Noto Serif JP',serif; font-size:0.85rem; color:var(--white); font-weight:600; margin-bottom:0.5rem;">支援者</p>
+        <p style="font-size:0.75rem; color:rgba(255,255,255,0.6); line-height:1.7;">
+          NCを持ち、<br>不確かさを抱えられる。<br>「答えが出なくていい」<br>という空間を保持する。
+        </p>
+      </div>
+
+      <!-- Arrow and relationship description -->
+      <div style="display:flex; flex-direction:column; align-items:center; gap:0.8rem; padding:0 0.5rem;">
+        <!-- Downward flow arrow -->
+        <div style="text-align:center;">
+          <svg width="40" height="60" viewBox="0 0 40 60" fill="none">
+            <!-- Bidirectional influence -->
+            <path d="M20 5 Q30 15 20 30 Q10 45 20 55" stroke="rgba(212,137,26,0.5)" stroke-width="1.2" fill="none" stroke-dasharray="4 3"/>
+            <path d="M15 50 L20 57 L25 50" stroke="rgba(212,137,26,0.5)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15 10 L20 3 L25 10" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <p style="font-size:0.68rem; color:rgba(255,255,255,0.45); letter-spacing:0.05em; white-space:nowrap;">容器と中身</p>
+        </div>
+      </div>
+
+      <!-- Client side -->
+      <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:1.5rem; text-align:center;">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" style="margin:0 auto 1rem; display:block;">
+          <circle cx="24" cy="18" r="6" stroke="rgba(255,255,255,0.5)" stroke-width="1.1"/>
+          <path d="M13 38 Q14 29 24 28 Q34 29 35 38" stroke="rgba(255,255,255,0.5)" stroke-width="1.1" fill="none"/>
+          <!-- Question marks floating -->
+          <text x="36" y="16" fill="rgba(212,137,26,0.5)" font-size="9" font-family="serif">?</text>
+          <text x="8" y="20" fill="rgba(212,137,26,0.35)" font-size="7" font-family="serif">?</text>
+          <text x="34" y="30" fill="rgba(212,137,26,0.3)" font-size="7" font-family="serif">?</text>
+        </svg>
+        <p style="font-family:'Noto Serif JP',serif; font-size:0.85rem; color:var(--white); font-weight:600; margin-bottom:0.5rem;">利用者さん</p>
+        <p style="font-size:0.75rem; color:rgba(255,255,255,0.6); line-height:1.7;">
+          支援者という「器」の中で、<br>自分の不確かさを<br>抱えていられるように<br>なっていく。
+        </p>
+      </div>
+    </div>
+
+    <div style="margin-top:1.5rem; padding:1rem 1.5rem; background:rgba(212,137,26,0.08); border-radius:4px; border:1px solid rgba(212,137,26,0.2);">
+      <p style="font-size:0.83rem; line-height:1.8; color:rgba(255,255,255,0.8); text-align:center;">
+        支援者が「まだわからなくていい」を保持できているとき、<br>
+        ご利用者もまた「まだわからなくていい」を体験できる。<br>
+        <strong style="color:var(--amber-light);">支援者のNCはご利用者のNCの器になる。</strong>
+      </p>
+    </div>
+  </div>
+
+  <!-- How to foster client NC -->
+  <h3 class="section-title reveal" style="font-size:1.4rem; margin-top:3rem; margin-bottom:1rem;">
+    利用者さんのNCを育む<em>支援の姿勢</em>
+  </h3>
+  <p class="body-text reveal reveal-delay-1">
+    NCは直接「教えられる」概念ではありません。むしろ、支援者との関わり方そのものを通じて、
+    ご利用者が体験的に身につけていくものです。
+  </p>
+
+  <div class="cultivate-items" style="margin-top:1.5rem;">
+    <div class="cultivate-item reveal reveal-delay-1">
+      <div class="cultivate-num" style="background:var(--slate); color:var(--amber-light);">A</div>
+      <div class="cultivate-text">
+        <h4>「まだわからなくていい」を明示的に伝える</h4>
+        <p>
+          「今の時点でわからないのは当然です。それを一緒に探っていくことが、ここでの時間の使い方です」と、
+          不確かさを問題として扱わないことを<strong>言葉にして伝える</strong>。
+          ご利用者は多くの場合、「早く決めなければ」という社会的プレッシャーを強く感じています。
+          「わからないままでいい空間がここにある」という体験自体が、NCを育みます。
+        </p>
+      </div>
+    </div>
+
+    <div class="cultivate-item reveal reveal-delay-2">
+      <div class="cultivate-num" style="background:var(--slate); color:var(--amber-light);">B</div>
+      <div class="cultivate-text">
+        <h4>試行錯誤を「失敗」でなく「情報」として一緒に受け取る</h4>
+        <p>
+          職場体験でうまくいかなかった体験を「どうすれば次うまくいくか」だけで処理せず、
+          「今回の体験から何が見えてきたか」と共に振り返る。
+          「うまくいかなかった＝自分はだめだ」という短絡を解体し、
+          <strong>プロセスの中の揺れを「データ」として扱える視点</strong>を培います。
+        </p>
+      </div>
+    </div>
+
+    <div class="cultivate-item reveal reveal-delay-3">
+      <div class="cultivate-num" style="background:var(--slate); color:var(--amber-light);">C</div>
+      <div class="cultivate-text">
+        <h4>自己像の「確定」を急がない関わり</h4>
+        <p>
+          「私はこういう人間です」という固定した自己像にすぐ同意せず、
+          「そういう一面もある。他にはどんな自分を知っていますか」と問い返す。
+          これは自己理解面談の文脈とも重なります——<strong>自己像を流動的に保つことがNCの実践</strong>であり、
+          固定した「診断ラベル＝自分」という図式から距離を置く力を育てます。
+        </p>
+      </div>
+    </div>
+
+    <div class="cultivate-item reveal">
+      <div class="cultivate-num" style="background:var(--slate); color:var(--amber-light);">D</div>
+      <div class="cultivate-text">
+        <h4>「この不確かさは、あなただけが感じていることではない」と伝える</h4>
+        <p>
+          就職できるかわからない不安・自分に合う仕事がわからない感覚——これらは
+          ほとんどの利用者が共有している体験です。
+          その不確かさを「あなたの弱さ」でも「障害の影響」でもなく、
+          <strong>この状況にいる人間として自然な反応</strong>として位置づけることが、
+          NCを育む第一歩になります。
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout reveal" style="margin-top:2rem;">
+    <p>
+      <strong>注意点：</strong>利用者のNCを育む関わりは、「答えを出さなくていい」という
+      支援者側の怠慢の正当化に使われるべきではありません。
+      利用者が「わからなくていい」でいられるのは、支援者が十分な観察・アセスメントを
+      継続しているからこそ成り立ちます。NCは観察と思考を手放すことではなく、
+      <strong>介入の時機を適切に保留することへの高度な判断</strong>です。
+    </p>
+  </div>
+</section>
+
+<!-- ─── CULTIVATE ─── -->
+<section id="cultivate">
+  <div class="section-label">Section 06</div>
+  <h2 class="section-title reveal">ネガティヴケイパビリティを<em>育てる</em></h2>
+  <p class="body-text reveal reveal-delay-1">
+    これは生まれ持った資質ではなく、意図的に培うことのできる能力です。
+    ただし「努力すれば高まる」という単純な技能習得とは異なり、
+    <strong>自分の内的状態への継続的な注意</strong>が中心になります。
+  </p>
+
+  <div class="cultivate-items">
+    <div class="cultivate-item reveal reveal-delay-1">
+      <div class="cultivate-num">01</div>
+      <div class="cultivate-text">
+        <h4>「焦り」を感じたとき、その焦りを観察する習慣</h4>
+        <p>
+          「今、自分は何かを早く解決しようとしていないか？」と気づく能力は、
+          ネガティヴケイパビリティの基礎です。
+          これはマインドフルネスの文脈と重なりますが、本質は
+          <strong>「自分の内的状態を一歩引いて見る力（メタ認知）」</strong>です。
+          面談後に「あのとき自分はなぜ急いだのか」を振り返るリフレクションの習慣が有効です。
+        </p>
+      </div>
+    </div>
+
+    <div class="cultivate-item reveal reveal-delay-2">
+      <div class="cultivate-num">02</div>
+      <div class="cultivate-text">
+        <h4>スーパービジョン・事例検討の場を活用する</h4>
+        <p>
+          ひとりでは「わからない」を抱えにくい。組織の中でその「わからなさ」を言語化し、
+          共有できる場があることが支援者を支えます。
+          スーパービジョン（上位の専門家による指導・省察の場）や同僚との事例検討は、
+          <strong>組織としてのネガティヴケイパビリティ</strong>を高める機能があります。
+        </p>
+      </div>
+    </div>
+
+    <div class="cultivate-item reveal reveal-delay-3">
+      <div class="cultivate-num">03</div>
+      <div class="cultivate-text">
+        <h4>「わかりません」と言える関係性をつくる</h4>
+        <p>
+          「支援者は答えを持っているはず」という暗黙の期待——それはご利用者だけでなく、
+          支援者自身が自分に課していることが多い。
+          <strong>「今の自分にはわかりません、一緒に考えさせてください」</strong>と正直に言える関係は、
+          ご利用者にとっても「わからなくていい」という安心感を提供します。
+        </p>
+      </div>
+    </div>
+
+    <div class="cultivate-item reveal reveal-delay-4">
+      <div class="cultivate-num">04</div>
+      <div class="cultivate-text">
+        <h4>文学・芸術・物語との接触</h4>
+        <p>
+          キーツが詩人として発見したように、物語・文学・芸術は「答えの出ない問いの中に居ること」を
+          体験する優れた訓練の場です。
+          解釈が確定しない作品を読み、「わからないまま感じる」経験を積むことが、
+          対人援助における耐性を間接的に高めると言われています（Nussbaum, 2001）。
+        </p>
+      </div>
+    </div>
+
+    <div class="cultivate-item reveal">
+      <div class="cultivate-num">05</div>
+      <div class="cultivate-text">
+        <h4>自己ケアと「抱える余白」の確保</h4>
+        <p>
+          消耗し、余裕のない状態では、不確かさを抱える器が縮小します。
+          ネガティヴケイパビリティは「余白」の上に成り立ちます。
+          自分自身のセルフケア・休息・回復は、この能力の維持に直結しています。
+          <strong>支援者のウェルビーイングはご利用者への支援の質に直結する</strong>
+          という視点を組織として持つことも重要です。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CRITICAL ─── -->
+<div class="critical-bg" id="critical">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--amber-light);">Section 07</div>
+    <h2 class="section-title reveal" style="color:var(--white);">批判的に見る——<em>限界と注意点</em></h2>
+    <p class="body-text reveal reveal-delay-1" style="color:rgba(255,255,255,0.7);">
+      ネガティヴケイパビリティはしばしば美化されて語られます。
+      就労移行支援の現場でこの概念を使うとき、いくつかの重要な限界と批判的視点を
+      意識しておく必要があります。
+    </p>
+
+    <div class="critical-items">
+      <div class="critical-card reveal reveal-delay-1">
+        <h4>「留まること」の制度的限界</h4>
+        <p>
+          就労移行支援には利用期間（原則2年）や数値目標が存在する。
+          「もっと時間があれば」という文脈でNCを語ることは、
+          制度的制約から目を逸らすことにもなりうる。
+          組織の構造的問題を個人の「耐える力」で補うことへの警戒が必要。
+        </p>
+      </div>
+      <div class="critical-card reveal reveal-delay-2">
+        <h4>証拠基盤の限界</h4>
+        <p>
+          ネガティヴケイパビリティは、測定が極めて難しい構成概念であり、
+          「これを高めると支援成果が改善する」というRCTレベルの直接的エビデンスは現時点では存在しない。
+          有用な概念的枠組みとして参照しつつ、過度な依拠には注意が必要。
+        </p>
+      </div>
+      <div class="critical-card reveal reveal-delay-3">
+        <h4>文化的文脈の問題</h4>
+        <p>
+          キーツのNCは、英国ロマン主義の個人主義的文脈で生まれた概念。
+          日本の組織文化（「空気を読む」「和を保つ」）におけるNCは、
+          異なる意味を持つ可能性がある。
+          「わからないと言う」行為の文化的コストを無視してはならない。
+        </p>
+      </div>
+      <div class="critical-card reveal reveal-delay-4">
+        <h4>「NC」が搾取の論理になるリスク</h4>
+        <p>
+          「不確かさに耐える力」を求められることが、
+          過重な感情労働・低処遇・不安定な雇用への諦め容認に使われる危険性がある。
+          NCは支援者個人の修養の問題ではなく、組織・制度の整備と同時に語られるべき概念。
+        </p>
+      </div>
+    </div>
+
+    <div class="callout" style="background:rgba(212,137,26,0.08); border-color:var(--amber-light); margin-top:2rem;">
+      <p style="color:rgba(255,255,255,0.8);">
+        <strong style="color:var(--amber-light);">まとめの問い：</strong>ネガティヴケイパビリティは、
+        支援者の「心の筋力」として有用な概念ですが、それが求められる背景にある
+        制度的・組織的な問いを同時に持ち続けることが、この概念を誠実に使う条件です。
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SOURCES ─── -->
+<div class="sources-bg" id="sources">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--slate);">参考文献・情報源</div>
+    <h2 class="section-title reveal">出典</h2>
+
+    <div class="sources-list reveal reveal-delay-1">
+      <div class="source-item">
+        <span class="source-num">01</span>
+        <div>
+          <strong>Keats, J. (1817).</strong> Letter to George and Thomas Keats, December 21, 1817.
+          In H. E. Rollins (Ed.), <em>The Letters of John Keats</em> (Vol. 1, pp. 193–194). Harvard University Press (1958).
+          <br>
+          <a href="https://www.bl.uk/romantics-and-victorians/articles/john-keats-and-negative-capability" target="_blank">
+            British Library — John Keats and Negative Capability
+          </a>
+        </div>
+      </div>
+      <div class="source-item">
+        <span class="source-num">02</span>
+        <div>
+          <strong>Bion, W. R. (1970).</strong> <em>Attention and Interpretation.</em> Tavistock Publications.
+          — ビオンによる「記憶なく・欲望なく」の原典。精神分析とネガティヴケイパビリティの接続を論じる。
+        </div>
+      </div>
+      <div class="source-item">
+        <span class="source-num">03</span>
+        <div>
+          <strong>Grupe, D. W., &amp; Nitschke, J. B. (2013).</strong> Uncertainty and anticipation in anxiety: An integrated neurobiological and psychological perspective. <em>Nature Reviews Neuroscience, 14</em>(7), 488–501.
+          <br>
+          <a href="https://doi.org/10.1038/nrn3524" target="_blank">https://doi.org/10.1038/nrn3524</a>
+          — 不確かさへの神経科学的反応（エラーシグナル）に関する参照文献。
+        </div>
+      </div>
+      <div class="source-item">
+        <span class="source-num">04</span>
+        <div>
+          <strong>帚木蓬生 (2017).</strong>『ネガティブ・ケイパビリティ——答えの出ない事態に耐える力』. 朝日選書.
+          — 日本語圏でこの概念を広めた一冊。医師・作家の立場から対人援助に論及。
+        </div>
+      </div>
+      <div class="source-item">
+        <span class="source-num">05</span>
+        <div>
+          <strong>Nussbaum, M. C. (2001).</strong> <em>Upheavals of Thought: The Intelligence of Emotions.</em> Cambridge University Press.
+          — 文学・物語体験が感情知性・共感能力を育てることへの論考。
+          <br>
+          <a href="https://doi.org/10.1017/CBO9780511840715" target="_blank">https://doi.org/10.1017/CBO9780511840715</a>
+        </div>
+      </div>
+      <div class="source-item">
+        <span class="source-num">06</span>
+        <div>
+          <strong>Mason, B. (1993).</strong> Towards positions of safe uncertainty. <em>Human Systems: The Journal of Systemic Consultation and Management, 4</em>(3–4), 189–200.
+          — 対人援助における「安全な不確かさの位置」という概念的枠組み。NCの実践的基礎として参照。
+        </div>
+      </div>
+      <div class="source-item">
+        <span class="source-num">07</span>
+        <div>
+          <strong>Cornish, S. (2011).</strong> Negative capability and social work: Insights from Keats, Bion and business. <em>Journal of Social Work Practice, 25</em>(2), 135–148.
+          <br>
+          <a href="https://doi.org/10.1080/02650533.2011.554974" target="_blank">https://doi.org/10.1080/02650533.2011.554974</a>
+          — ソーシャルワーク実践とNCの接続を論じた査読論文。キーツ・ビオン・経営学の知見を統合し、開かれた心・多様性への注意・エゴの保留がNCの構成要素であることを論じる。
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <span>岡村雄一郎</span>
+</footer>
+
+<script>
+  // ─── PROGRESS BAR ───
+  window.addEventListener('scroll', () => {
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = (window.scrollY / total) * 100;
+    document.getElementById('progress-bar').style.width = progress + '%';
+  });
+
+  // ─── SCROLL REVEAL ───
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  revealEls.forEach(el => observer.observe(el));
+
+  // ─── NAV SCROLL ───
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.querySelector(anchor.getAttribute('href'));
+      if (target) {
+        const offset = 56;
+        const top = target.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+</body>
+</html>
