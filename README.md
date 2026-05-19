@@ -1,0 +1,2 @@
+# negative-capability
+ネガティブケイパビリティ
